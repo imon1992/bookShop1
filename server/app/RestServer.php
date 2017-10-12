@@ -30,10 +30,12 @@ class RestServer
 
     public function run()
     {
+//        echo json_encode($this->requestMethod);
+        //return $this->requestMethod;
         list($s, $user, $REST, $server, $api, $dir, $params) = explode("/", $this->url, 7);
         $this->classCreate($dir);
 
-        switch ($this->requestMethod) {
+        switch (trim($this->requestMethod)) {
             case 'GET':
                 return $this->setMethod('get' . ucfirst($dir), $params);
                 break;
@@ -41,6 +43,8 @@ class RestServer
                 return $this->setMethod('post' . ucfirst($dir), '');
                 break;
             case 'PUT':
+                //return 1;
+//return $this->requestMethod;
                 return $this->setMethod('put' . ucfirst($dir), '');
                 break;
             case 'DELETE':
@@ -48,14 +52,14 @@ class RestServer
                 return $this->setMethod('delete' . ucfirst($dir), $params);
 //                $this->sendHeaders(501);
                 break;
-            default:
-                $this->sendHeaders(501);
+            //default:
+              //  $this->sendHeaders(501);
         }
     }
 
     protected function setMethod($classMethod, $params)
     {
-
+//return $classMethod;
 //var_dump($params);
 //var_dump($classMethod);
         if (method_exists($this->class, $classMethod)) {
