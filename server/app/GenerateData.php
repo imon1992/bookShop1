@@ -10,7 +10,7 @@ class GenerateData{
         foreach($putArr as $value)
         {
             $params = explode('=',$value);
-            $result[$params[0]] = json_decode($params[1]);
+            $result[$params[0]] = json_decode($params[1],true);
         }
 
         return $result;
