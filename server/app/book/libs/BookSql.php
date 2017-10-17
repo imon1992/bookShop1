@@ -131,23 +131,24 @@ class BookSql
 
     public function getBookById($id)
     {
+        $result = [];
         if($this->dbConnect !== 'connect error')
         {
-            $stmt =$this->dbConnect->prepare("select Book.id,
+            $stmt =$this->dbConnect->prepare("select Book.id,Book.name,Book.price,Book.description,Book.discount,
                     GROUP_CONCAT(DISTINCT Author.name,' ',Author.surname ORDER BY Author.name ASC SEPARATOR ', ')as authors,
                     GROUP_CONCAT(DISTINCT Genre.name ORDER BY Genre.name ASC SEPARATOR ', ') as genres
                     FROM Book LEFT JOIN BookAuthor ON Book.id=BookAuthor.book_id
                     LEFT JOIN BookGenre ON Book.id=BookGenre.book_id
                     LEFT JOIN Author ON Author.id=BookAuthor.author_id
                     LEFT JOIN Genre ON Genre.id=BookGenre.genre_id
-                    WHERE Book.id = 1"
+                    WHERE Book.id = :id"
             );
             $stmt->bindParam(':id',$id);
-            $stmt->bindParam(':name',$name);
-            $stmt->bindParam(':price',$price);
-            $stmt->bindParam(':description',$description);
-            $stmt->bindParam(':discount',$discount);
-            $result = $stmt->execute();
+            $stmt->execute();
+            while($assocRow = $stmt->fetch(PDO::FETCH_ASSOC))
+            {
+                $result = $assocRow; 
+            }
         }else
         {
             $result = 'error';

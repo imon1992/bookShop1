@@ -15,7 +15,11 @@ class Books
         if($params == false)
         {
             $result = $this->bookSql->getAllBooks();
+        }else
+        {
+            $result = $this->bookSql->getBookById($params);
         }
+
         return $result;
     }
 
