@@ -1,11 +1,13 @@
 <?php
-include ('GenerateData.php');
-include ('author/Authors.php');
-include ('author/libs/AuthorSql.php');
-include ('genre/Genres.php');
-include ('genre/libs/GenreSql.php');
-include ('book/Books.php');
-include ('book/libs/BookSql.php');
+require_once('Autoloader.php');
+spl_autoload_register(array('Autoloader', 'loadPackages'));
+//include ('GenerateData.php');
+//include ('author/Authors.php');
+//include ('author/libs/AuthorSql.php');
+//include ('genre/Genres.php');
+//include ('genre/libs/GenreSql.php');
+//include ('book/Books.php');
+//include ('book/libs/BookSql.php');
 include ('config.php');
 
 class RestServer

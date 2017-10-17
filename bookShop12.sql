@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Окт 13 2017 г., 16:11
+-- Время создания: Окт 17 2017 г., 16:02
 -- Версия сервера: 5.5.53
 -- Версия PHP: 5.5.38
 
@@ -14,7 +14,7 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!40101 SET NAMES utf8mb4 */;
 
 --
 -- База данных: `bookShop`
@@ -37,8 +37,10 @@ CREATE TABLE `Author` (
 --
 
 INSERT INTO `Author` (`id`, `name`, `surname`) VALUES
-(2, 'Bob', 'Broun'),
-(3, 'Ben', 'Mor');
+(5, 'Bob', 'More'),
+(6, 'Ben', 'Brown'),
+(7, 'Stiw', 'Jobssss'),
+(10, 'Bogdan', 'Stupka');
 
 -- --------------------------------------------------------
 
@@ -59,19 +61,9 @@ CREATE TABLE `Book` (
 --
 
 INSERT INTO `Book` (`id`, `name`, `price`, `description`, `discount`) VALUES
-(1, 'War', 200, 'new desc', 3),
-(2, 'War of Gods', 250, 'War of Gods desc', 0),
-(3, 'War of Gods', 250, 'War of Gods desc', 0),
-(4, 'War of Gods', 250, 'War of Gods desc', 0),
-(5, 'War of Gods', 250, 'War of Gods desc', 0),
-(6, 'War of Gods', 250, 'War of Gods desc', 0),
-(7, 'War of Gods', 250, 'War of Gods desc', 0),
-(8, 'War of Gods', 250, 'War of Gods desc', 0),
-(9, 'War of Gods', 250, 'War of Gods desc', 0),
-(10, 'War of Gods', 250, 'War of Gods desc', 0),
-(11, 'War of Gods', 250, 'War of Gods desc', 0),
-(12, 'War of Gods', 250, 'War of Gods desc', 0),
-(13, 'dsa', 0, 'das', 0);
+(1, 'War of Gods', 250, 'War of Gods desc', 4),
+(2, 'metro 2033', 500, 'desc', 3),
+(3, 'My Memuars', 465, 'My Memuars desc', 5);
 
 -- --------------------------------------------------------
 
@@ -90,15 +82,10 @@ CREATE TABLE `BookAuthor` (
 --
 
 INSERT INTO `BookAuthor` (`id`, `book_id`, `author_id`) VALUES
-(1, 1, 2),
-(2, 1, 3),
-(3, 1, 2),
-(4, 1, 3),
-(5, 1, 2),
-(6, 1, 3),
-(7, 12, 2),
-(8, 12, 3),
-(9, 13, 3);
+(2, 1, 10),
+(3, 2, 10),
+(7, 1, 5),
+(8, 3, 7);
 
 -- --------------------------------------------------------
 
@@ -117,27 +104,9 @@ CREATE TABLE `BookGenre` (
 --
 
 INSERT INTO `BookGenre` (`id`, `book_id`, `genre_id`) VALUES
-(1, 1, 1),
-(2, 1, 3),
-(3, 1, 4),
-(4, 6, 1),
-(5, 7, 1),
-(6, 7, 4),
-(7, 8, 1),
-(8, 8, 4),
-(9, 1, 1),
-(10, 1, 4),
-(11, 9, 1),
-(12, 9, 4),
-(13, 1, 1),
-(14, 1, 4),
-(15, 10, 1),
-(16, 10, 4),
-(17, 11, 1),
-(18, 11, 4),
-(19, 12, 1),
-(20, 12, 4),
-(21, 13, 1);
+(2, 2, 2),
+(3, 3, 2),
+(5, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -152,11 +121,24 @@ CREATE TABLE `Client` (
   `phone` varchar(13) DEFAULT NULL,
   `email` varchar(50) DEFAULT NULL,
   `login` varchar(20) NOT NULL,
-  `password` varchar(20) NOT NULL,
+  `password` varchar(150) NOT NULL,
+  `hash` varchar(150) NOT NULL,
   `discount` float NOT NULL DEFAULT '0',
   `isActive` tinyint(1) NOT NULL,
   `role` enum('admin','user') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `Client`
+--
+
+INSERT INTO `Client` (`id`, `name`, `surname`, `phone`, `email`, `login`, `password`, `hash`, `discount`, `isActive`, `role`) VALUES
+(1, NULL, NULL, NULL, NULL, '', '74be16979710d4c4e7c6', '', 0, 0, 'admin'),
+(4, NULL, NULL, NULL, NULL, 'test', 'ec6a6536ca304edf844d1d248a4f08dc', '1ba249876eaa33de5a52c29ed739c934', 0, 0, 'admin'),
+(6, 'Andrew', 'Kolotii', '0975998789', 'imon@mksat.net', 'imon', 'bb46977affa222b1237af74ec23c45a1', 'ae459b17c2534f5c9b35430b72ec498b', 0, 0, 'user'),
+(7, 'imon', 'dsfsdfsd', '948468548546', 'imon@mksat.net', 'imonX', 'ec6a6536ca304edf844d1d248a4f08dc', 'ed9578cda9f4d436203336d63abe301a', 0, 1, 'user'),
+(8, 'NormA', 'Norms', '354353453534', 'imon@mksat.net', 'norm', 'ec6a6536ca304edf844d1d248a4f08dc', 'c994123fb4a50bb4cc178fc0dc74abbb', 0, 0, 'user'),
+(9, 'John', 'Smith', '5236854689', 'imon@mksat.net', 'testAsd', '2952e1846b4ea765dfd0fdfcb7e21097', '', 5, 0, 'user');
 
 -- --------------------------------------------------------
 
@@ -189,9 +171,10 @@ CREATE TABLE `Genre` (
 --
 
 INSERT INTO `Genre` (`id`, `name`) VALUES
-(1, 'Shadow'),
-(3, 'asd'),
-(4, 'triller');
+(1, 'shadowww'),
+(2, 'triller'),
+(3, 'Fantastika'),
+(4, 'melodrama');
 
 -- --------------------------------------------------------
 
@@ -333,27 +316,27 @@ ALTER TABLE `StatusOrder`
 -- AUTO_INCREMENT для таблицы `Author`
 --
 ALTER TABLE `Author`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT для таблицы `Book`
 --
 ALTER TABLE `Book`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT для таблицы `BookAuthor`
 --
 ALTER TABLE `BookAuthor`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT для таблицы `BookGenre`
 --
 ALTER TABLE `BookGenre`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT для таблицы `Client`
 --
 ALTER TABLE `Client`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 --
 -- AUTO_INCREMENT для таблицы `FullInfoOrder`
 --

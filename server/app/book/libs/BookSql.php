@@ -41,10 +41,12 @@ class BookSql
     {
         if($this->dbConnect !== 'connect error')
         {
+            $stmt =$this->dbConnect->prepare('
+                INSERT INTO BookGenre(book_id,genre_id)
+                VALUES(:bookId,:genreId)
+                ');
             foreach($genres as &$genreId)
             {
-                $stmt =$this->dbConnect->prepare('INSERT INTO BookGenre(book_id,genre_id)
-                                                  VALUES(:bookId,:genreId)');
                 $stmt->bindParam(':bookId',$bookId);
                 $stmt->bindParam(':genreId',$genreId);
                 $result = $stmt->execute();
@@ -61,10 +63,10 @@ class BookSql
     {
         if($this->dbConnect !== 'connect error')
         {
+            $stmt =$this->dbConnect->prepare('INSERT INTO BookAuthor(book_id,author_id)
+                                              VALUES(:bookId,:authorId)');
             foreach($authors as &$authorId)
             {
-                $stmt =$this->dbConnect->prepare('INSERT INTO BookAuthor(book_id,author_id)
-                                                  VALUES(:bookId,:authorId)');
                 $stmt->bindParam(':bookId',$bookId);
                 $stmt->bindParam(':authorId',$authorId);
                 $result = $stmt->execute();
@@ -84,10 +86,10 @@ class BookSql
         {
             $stmt =$this->dbConnect->prepare('SELECT b.*,a.name as authorName,a.surname, a.id as authorId, g.name as genreName, g.id as genreId
                                                 FROM Book as b
-                                                INNER JOIN BookAuthor as ba on b.id =ba.book_id
-                                                INNER JOIN Author as a on a.id = ba.author_id
-                                                INNER JOIN BookGenre as bg on b.id =bg.book_id
-                                                INNER JOIN Genre as g on g.id = bg.genre_id
+                                                LEFT JOIN BookAuthor as ba on b.id =ba.book_id
+                                                LEFT JOIN Author as a on a.id = ba.author_id
+                                                LEFT JOIN BookGenre as bg on b.id =bg.book_id
+                                                LEFT JOIN Genre as g on g.id = bg.genre_id
                                             ');
 
             $stmt->execute();
@@ -95,9 +97,9 @@ class BookSql
             {
                 if(array_key_exists($assocRow['id'],$result))
                 {
-                    if(!array_key_exists($assocRow['genreId'],$result[$assocRow['id']]['genres']))
+                    if (!array_key_exists($assocRow['genreId'], $result[$assocRow['id']]['genres']))
                     {
-                    $genre = ['id'=>$assocRow['genreId'],'name'=>$assocRow['genreName']];
+                        $genre = ['id' => $assocRow['genreId'], 'name' => $assocRow['genreName']];
                         $result[$assocRow['id']]['genres'][$assocRow['genreId']] = $genre;
                     }
                     if(!array_key_exists($assocRow['authorId'],$result[$assocRow['id']]['authors']))
@@ -113,12 +115,39 @@ class BookSql
                     $book['price'] = $assocRow['price'];
                     $book['description'] = $assocRow['description'];
                     $book['genres'][$assocRow['genreId']] = ['id'=>$assocRow['genreId'],'name'=>$assocRow['genreName']];
-                    $book['authors'][$assocRow['authorId']] = ['id'=>$assocRow['authorId'],'name'=>$assocRow['authorName'],
+                        $book['authors'][$assocRow['authorId']] = ['id'=>$assocRow['authorId'],'name'=>$assocRow['authorName'],
                                     'surname'=>$assocRow['surname']];
                     $book['discount'] = $assocRow['discount'];
                     $result[$assocRow['id']] = $book;
                 }
             }
+        }else
+        {
+            $result = 'error';
+        }
+
+        return $result;
+    }
+
+    public function getBookById($id)
+    {
+        if($this->dbConnect !== 'connect error')
+        {
+            $stmt =$this->dbConnect->prepare("select Book.id,
+                    GROUP_CONCAT(DISTINCT Author.name,' ',Author.surname ORDER BY Author.name ASC SEPARATOR ', ')as authors,
+                    GROUP_CONCAT(DISTINCT Genre.name ORDER BY Genre.name ASC SEPARATOR ', ') as genres
+                    FROM Book LEFT JOIN BookAuthor ON Book.id=BookAuthor.book_id
+                    LEFT JOIN BookGenre ON Book.id=BookGenre.book_id
+                    LEFT JOIN Author ON Author.id=BookAuthor.author_id
+                    LEFT JOIN Genre ON Genre.id=BookGenre.genre_id
+                    WHERE Book.id = 1"
+            );
+            $stmt->bindParam(':id',$id);
+            $stmt->bindParam(':name',$name);
+            $stmt->bindParam(':price',$price);
+            $stmt->bindParam(':description',$description);
+            $stmt->bindParam(':discount',$discount);
+            $result = $stmt->execute();
         }else
         {
             $result = 'error';
@@ -153,14 +182,15 @@ class BookSql
         if($this->dbConnect !== 'connect error')
         {
             $stmt =$this->dbConnect->prepare('UPDATE BookAuthor
-                                            SET author_id = :name, price = :price, description=:description, discount=:discount
-                                            WHERE id = :id');
-            $stmt->bindParam(':id',$id);
-            $stmt->bindParam(':name',$name);
-            $stmt->bindParam(':price',$price);
-            $stmt->bindParam(':description',$description);
-            $stmt->bindParam(':discount',$discount);
-            $result = $stmt->execute();
+                                            SET author_id = :newAuthorId
+                                            WHERE book_id = :bookId AND author_id = :oldAuthorId');
+            foreach($newAuthors as $key=>&$authorId)
+            {
+                $stmt->bindParam(':newAuthorId',$authorId['id']);
+                $stmt->bindParam(':bookId',$bookId);
+                $stmt->bindParam(':oldAuthorId',$oldAuthors[$key]['id']);
+                $result = $stmt->execute();
+            }
         }else
         {
             $result = 'error';
@@ -169,28 +199,65 @@ class BookSql
         return $result;
     }
 
-    public function updateBookGenres($bookId,$genres)
+    public function deleteBookGenre($bookId,$genres)
     {
-
-    }
-
-    public function getBookGenreId($bookId,$genres)
-    {
-//        var_dump($genres);
-        foreach($genres as &$genre)
         if($this->dbConnect !== 'connect error')
         {
-            $stmt =$this->dbConnect->prepare('SELECT id
-                                            FROM BookGenre
-                                            WHERE book_id = :bookId AND genre_id = :genreId');
-            $stmt->bindParam(':bookId',$bookId);
-//            var_dump($genre['id']);
-            $stmt->bindParam(':genreId',$genre['id']);
-            $result = $stmt->execute();
-            while($assocRow = $stmt->fetch(PDO::FETCH_ASSOC))
+            $stmt =$this->dbConnect->prepare('
+                DELETE
+                FROM BookGenre
+                WHERE book_id = :bookId AND genre_id = :genreId
+                ');
+            foreach($genres as &$genreId)
             {
-//                $result1[] = $assocRow['id'];
-                var_dump($assocRow['id']);
+                $stmt->bindParam(':bookId',$bookId);
+                $stmt->bindParam(':genreId',$genreId);
+                $result = $stmt->execute();
+            }
+        }else
+        {
+            $result = 'error';
+        }
+
+        return $result;
+    }
+
+    public function deleteBookAuthor($bookId,$authors)
+    {
+        if($this->dbConnect !== 'connect error')
+        {
+            $stmt =$this->dbConnect->prepare('
+                DELETE
+                FROM BookAuthor
+                WHERE book_id = :bookId AND author_id = :authorId
+                ');
+            foreach($authors as &$authorId)
+            {
+                $stmt->bindParam(':bookId',$bookId);
+                $stmt->bindParam(':authorId',$authorId);
+                $result = $stmt->execute();
+            }
+        }else
+        {
+            $result = 'error';
+        }
+
+        return $result;
+    }
+
+    public function updateBookGenres($bookId,$newGenres,$oldGenres)
+    {
+        if($this->dbConnect !== 'connect error')
+        {
+            $stmt =$this->dbConnect->prepare('UPDATE BookGenre
+                                            SET genre_id = :newGenreId
+                                            WHERE book_id = :bookId AND genre_id = :oldGenreId');
+            foreach($newGenres as $key=>&$genreId)
+            {
+                $stmt->bindParam(':newGenreId',$genreId['id']);
+                $stmt->bindParam(':bookId',$bookId);
+                $stmt->bindParam(':oldGenreId',$oldGenres[$key]['id']);
+                $result = $stmt->execute();
             }
         }else
         {
@@ -200,7 +267,3 @@ class BookSql
         return $result;
     }
 }
-
-//$c = new BookSql();
-//$x = $c->getAllBooks();
-//print_r($x);

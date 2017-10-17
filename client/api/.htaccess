@@ -1,4 +1,4 @@
 RewriteEngine On
 RewriteBase /api/
-#RewriteRule (.*) http://bookShop/user14/bookShopRest/server/api/$1 [P]
-RewriteRule (.*) http://192.168.0.15/~user14/bookShop1/server/api/$1 [P]
+RewriteRule (.*) http://bookShop/user14/bookShopRest/server/api/$1 [P]
+#RewriteRule (.*) http://192.168.0.15/~user14/bookShop1/server/api/$1 [P]
