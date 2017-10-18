@@ -18,7 +18,7 @@ class Users
             $result = $this->userSql->getUsers();
         }else
         {
-            $result = false;
+            $result = $this->userSql->getUserById($params);
         }
         return $result;
     }

@@ -38,6 +38,30 @@ class UserSql
         return $result;
     }
 
+    public function getUserById($id)
+    {
+        $result = [];
+        if($this->dbConnect !== 'connect error')
+        {
+            $stmt =$this->dbConnect->prepare('SELECT c.id,c.name,c.surname,c.phone,c.email,c.login
+                FROM Client as c
+                WHERE id=:id
+                ');
+            $stmt->bindParam(':id',$id);
+            $stmt->execute();
+            while($assocRow = $stmt->fetch(PDO::FETCH_ASSOC))
+            {
+                $result[$assocRow['id']] = $assocRow;
+            }
+        }else
+        {
+            $result = 'error';
+        }
+
+        return $result;
+
+    }
+
     public function updateUser($params)
     {
         if($this->dbConnect !== 'connect error')
