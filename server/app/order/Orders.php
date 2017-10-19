@@ -17,12 +17,15 @@ class Orders
             $userId = json_decode($_POST['userId']);
             $paymentSystemId = json_decode($_POST['paymentId']);
             $totalPrice = json_decode($_POST['totalPrice']);
+            //return $userId;
 
             $bagSql = new BagSql();
             $userBag = $bagSql->getUserBag($userId);
 
             $clientDiscount = $userBag[0]['clientDiscount'];
+           // var_dump($clientDiscount);
             $statusId = 1;
+            date_default_timezone_set('Europe/Kiev');
             $dateCreate = date('Y-m-d-G-i-s');
 
             foreach($userBag as $key=>$val)
@@ -31,7 +34,7 @@ class Orders
                     unset($userBag[$key]['name']);
                     unset($userBag[$key]['posNumber']);
             }
-            $result = $this->orderSql->addOrder($paymentSystemId,$statusId,$dateCreate,$totalPrice,$clientDiscount);
+            $result = $this->orderSql->addOrder($paymentSystemId,$statusId,$dateCreate,$totalPrice,$clientDiscount,$userId);
 
             if($result !== 'error' && $result !== false)
             {

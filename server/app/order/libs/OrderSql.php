@@ -17,13 +17,13 @@ class OrderSql
         }
     }
 
-   public function addOrder($paymentId,$statusId,$dateCreate,$totalPrice,$userDisc)
+   public function addOrder($paymentId,$statusId,$dateCreate,$totalPrice,$userDisc,$userId)
    {
        if($this->dbConnect !== 'connect error')
        {
            $stmt =$this->dbConnect->prepare('
-                INSERT INTO userOrder(payment_id,status_id,createDate,totalPrice,userDiscount)
-                VALUES(:payment,:status,:createDate,:totalPrice,:userDiscount)
+                INSERT INTO userOrder(payment_id,status_id,createDate,totalPrice,userDiscount,user_id)
+                VALUES(:payment,:status,:createDate,:totalPrice,:userDiscount,:userId)
                 ');
 
                $stmt->bindParam(':payment',$paymentId);
@@ -31,6 +31,7 @@ class OrderSql
                $stmt->bindParam(':createDate',$dateCreate);
                $stmt->bindParam(':totalPrice',$totalPrice);
                $stmt->bindParam(':userDiscount',$userDisc);
+               $stmt->bindParam(':userId',$userId);
                $result = $stmt->execute();
            $result = $this->dbConnect->lastInsertId();
        }else
@@ -73,11 +74,9 @@ class OrderSql
         if($this->dbConnect !== 'connect error')
         {
             $stmt =$this->dbConnect->prepare('
-            SELECT uo.id,uo.createDate,uo.totalPrice,s.name
-            FROM userOrder as uo
-            INNER JOIN StatusOrder as s on s.id = uo.payment_id
-            WHERE uo.user_id = :userId
-            ');
+SELECT uo.id,uo.createDate,uo.totalPrice,s.name 
+            FROM userOrder as uo, StatusOrder as s 
+                        WHERE uo.user_id = 7 and s.id = uo.status_id');
             $stmt->bindParam(':userId',$userId);
             $stmt->execute();
 
