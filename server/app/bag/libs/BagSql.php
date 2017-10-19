@@ -86,6 +86,25 @@ class BagSql
         return $result;
     }
 
+    public function clearUserDag($userId)
+    {
+        if($this->dbConnect !== 'connect error')
+        {
+            $stmt =$this->dbConnect->prepare('
+                DELETE
+                FROM Bag
+                WHERE client_id = :userId
+                ');
+                $stmt->bindParam(':userId',$userId);
+                $result = $stmt->execute();
+        }else
+        {
+            $result = 'error';
+        }
+
+        return $result;
+    }
+
     public function updateUserBag($bookId,$userId,$count)
     {
         if($this->dbConnect !== 'connect error')

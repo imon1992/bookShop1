@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Окт 18 2017 г., 15:59
+-- Время создания: Окт 19 2017 г., 15:56
 -- Версия сервера: 5.5.53
 -- Версия PHP: 5.5.38
 
@@ -14,7 +14,7 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!40101 SET NAMES utf8mb4 */;
 
 --
 -- База данных: `bookShop`
@@ -54,13 +54,6 @@ CREATE TABLE `Bag` (
   `client_id` int(11) NOT NULL,
   `count` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Дамп данных таблицы `Bag`
---
-
-INSERT INTO `Bag` (`id`, `book_id`, `client_id`, `count`) VALUES
-(6, 1, 7, 1);
 
 -- --------------------------------------------------------
 
@@ -156,24 +149,9 @@ INSERT INTO `Client` (`id`, `name`, `surname`, `phone`, `email`, `login`, `passw
 (1, NULL, NULL, NULL, NULL, '', '74be16979710d4c4e7c6', '', 0, 0, 'admin'),
 (4, NULL, NULL, NULL, NULL, 'test', 'ec6a6536ca304edf844d1d248a4f08dc', '1ba249876eaa33de5a52c29ed739c934', 0, 0, 'admin'),
 (6, 'Andrew', 'Kolotii', '0975998789', 'imon@mksat.net', 'imon', 'bb46977affa222b1237af74ec23c45a1', 'ae459b17c2534f5c9b35430b72ec498b', 0, 0, 'user'),
-(7, 'imon', 'dsfsdfsd', '948468548546', 'imon@mksat.net', 'imonX', 'ec6a6536ca304edf844d1d248a4f08dc', 'fbbc33344e4292150651faf1d9906ce2', 5, 1, 'user'),
+(7, 'imon', 'dsfsdfsd', '948468548546', 'imon@mksat.net', 'imonX', 'ec6a6536ca304edf844d1d248a4f08dc', 'b704aab28ee09fc4a7cb05579e8eb70a', 5, 1, 'user'),
 (8, 'NormA', 'Norms', '354353453534', 'imon@mksat.net', 'norm', 'ec6a6536ca304edf844d1d248a4f08dc', 'c994123fb4a50bb4cc178fc0dc74abbb', 0, 0, 'user'),
 (9, 'John', 'Smith', '5236854689', 'imon@mksat.net', 'testAsd', '2952e1846b4ea765dfd0fdfcb7e21097', '', 5, 0, 'user');
-
--- --------------------------------------------------------
-
---
--- Структура таблицы `FullInfoOrder`
---
-
-CREATE TABLE `FullInfoOrder` (
-  `id` int(11) NOT NULL,
-  `order_id` int(11) NOT NULL,
-  `book_price` double NOT NULL,
-  `book_id` int(11) NOT NULL,
-  `count` smallint(6) NOT NULL,
-  `discount_book` float NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -213,18 +191,26 @@ CREATE TABLE `HistoryBook` (
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `Order`
+-- Структура таблицы `orderPart`
 --
 
-CREATE TABLE `Order` (
+CREATE TABLE `orderPart` (
   `id` int(11) NOT NULL,
-  `client_id` int(11) NOT NULL,
-  `payment_id` int(11) NOT NULL,
-  `status_id` int(11) NOT NULL,
-  `skidka_client` float NOT NULL DEFAULT '0',
-  `date_order_create` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `total_price` float NOT NULL
+  `book_id` int(11) NOT NULL,
+  `order_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `count` int(11) NOT NULL,
+  `bookPrice` int(11) NOT NULL,
+  `bookDiscount` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `orderPart`
+--
+
+INSERT INTO `orderPart` (`id`, `book_id`, `order_id`, `user_id`, `count`, `bookPrice`, `bookDiscount`) VALUES
+(1, 1, 1, 7, 1, 250, 4),
+(2, 2, 1, 7, 1, 500, 3);
 
 -- --------------------------------------------------------
 
@@ -237,6 +223,14 @@ CREATE TABLE `Payment` (
   `name` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Дамп данных таблицы `Payment`
+--
+
+INSERT INTO `Payment` (`id`, `name`) VALUES
+(1, 'WebMoney'),
+(2, 'Pay Pal');
+
 -- --------------------------------------------------------
 
 --
@@ -247,6 +241,36 @@ CREATE TABLE `StatusOrder` (
   `id` int(11) NOT NULL,
   `name` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `StatusOrder`
+--
+
+INSERT INTO `StatusOrder` (`id`, `name`) VALUES
+(1, 'In Process');
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `userOrder`
+--
+
+CREATE TABLE `userOrder` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `payment_id` int(11) NOT NULL,
+  `status_id` int(11) NOT NULL,
+  `createDate` datetime NOT NULL,
+  `totalPrice` float NOT NULL,
+  `userDiscount` float NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `userOrder`
+--
+
+INSERT INTO `userOrder` (`id`, `user_id`, `payment_id`, `status_id`, `createDate`, `totalPrice`, `userDiscount`) VALUES
+(1, 7, 1, 1, '2017-10-19 13:34:43', 689, 5);
 
 --
 -- Индексы сохранённых таблиц
@@ -296,14 +320,6 @@ ALTER TABLE `Client`
   ADD UNIQUE KEY `login` (`login`);
 
 --
--- Индексы таблицы `FullInfoOrder`
---
-ALTER TABLE `FullInfoOrder`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `FullInfoOrder_fk0` (`order_id`),
-  ADD KEY `FullInfoOrder_fk1` (`book_id`);
-
---
 -- Индексы таблицы `Genre`
 --
 ALTER TABLE `Genre`
@@ -316,13 +332,11 @@ ALTER TABLE `HistoryBook`
   ADD PRIMARY KEY (`id`);
 
 --
--- Индексы таблицы `Order`
+-- Индексы таблицы `orderPart`
 --
-ALTER TABLE `Order`
+ALTER TABLE `orderPart`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `Order_fk0` (`client_id`),
-  ADD KEY `Order_fk1` (`payment_id`),
-  ADD KEY `Order_fk2` (`status_id`);
+  ADD KEY `bookId` (`book_id`);
 
 --
 -- Индексы таблицы `Payment`
@@ -337,6 +351,14 @@ ALTER TABLE `StatusOrder`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Индексы таблицы `userOrder`
+--
+ALTER TABLE `userOrder`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `paymentStatus` (`payment_id`),
+  ADD KEY `status` (`status_id`);
+
+--
 -- AUTO_INCREMENT для сохранённых таблиц
 --
 
@@ -349,7 +371,7 @@ ALTER TABLE `Author`
 -- AUTO_INCREMENT для таблицы `Bag`
 --
 ALTER TABLE `Bag`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT для таблицы `Book`
 --
@@ -371,11 +393,6 @@ ALTER TABLE `BookGenre`
 ALTER TABLE `Client`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 --
--- AUTO_INCREMENT для таблицы `FullInfoOrder`
---
-ALTER TABLE `FullInfoOrder`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
---
 -- AUTO_INCREMENT для таблицы `Genre`
 --
 ALTER TABLE `Genre`
@@ -386,20 +403,25 @@ ALTER TABLE `Genre`
 ALTER TABLE `HistoryBook`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT для таблицы `Order`
+-- AUTO_INCREMENT для таблицы `orderPart`
 --
-ALTER TABLE `Order`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `orderPart`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT для таблицы `Payment`
 --
 ALTER TABLE `Payment`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT для таблицы `StatusOrder`
 --
 ALTER TABLE `StatusOrder`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT для таблицы `userOrder`
+--
+ALTER TABLE `userOrder`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- Ограничения внешнего ключа сохраненных таблиц
 --
@@ -426,19 +448,17 @@ ALTER TABLE `BookGenre`
   ADD CONSTRAINT `BookGenre_fk1` FOREIGN KEY (`genre_id`) REFERENCES `Genre` (`id`);
 
 --
--- Ограничения внешнего ключа таблицы `FullInfoOrder`
+-- Ограничения внешнего ключа таблицы `orderPart`
 --
-ALTER TABLE `FullInfoOrder`
-  ADD CONSTRAINT `FullInfoOrder_fk0` FOREIGN KEY (`order_id`) REFERENCES `Order` (`id`),
-  ADD CONSTRAINT `FullInfoOrder_fk1` FOREIGN KEY (`book_id`) REFERENCES `Book` (`id`);
+ALTER TABLE `orderPart`
+  ADD CONSTRAINT `bookId` FOREIGN KEY (`book_id`) REFERENCES `Book` (`id`);
 
 --
--- Ограничения внешнего ключа таблицы `Order`
+-- Ограничения внешнего ключа таблицы `userOrder`
 --
-ALTER TABLE `Order`
-  ADD CONSTRAINT `Order_fk0` FOREIGN KEY (`client_id`) REFERENCES `Client` (`id`),
-  ADD CONSTRAINT `Order_fk1` FOREIGN KEY (`payment_id`) REFERENCES `Payment` (`id`),
-  ADD CONSTRAINT `Order_fk2` FOREIGN KEY (`status_id`) REFERENCES `StatusOrder` (`id`);
+ALTER TABLE `userOrder`
+  ADD CONSTRAINT `paymentStatus` FOREIGN KEY (`payment_id`) REFERENCES `Payment` (`id`),
+  ADD CONSTRAINT `status` FOREIGN KEY (`status_id`) REFERENCES `StatusOrder` (`id`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

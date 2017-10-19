@@ -15,6 +15,10 @@ class Autoloader
         '../app/user/',
         '../app/bag/libs/',
         '../app/bag/',
+        '../app/paymentSystem/libs/',
+        '../app/paymentSystem/',
+        '../app/order/libs/',
+        '../app/order/',
         '../app/'];
 
     public static function loadPackages($className)
