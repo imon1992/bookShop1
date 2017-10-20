@@ -81,7 +81,7 @@ class BookSql
 
     public function getAllBooks()
     {
-        $result = [];
+//        $result = [];
         if($this->dbConnect !== 'connect error')
         {
             $stmt =$this->dbConnect->prepare('SELECT b.*,a.name as authorName,a.surname, a.id as authorId, g.name as genreName, g.id as genreId
@@ -93,34 +93,61 @@ class BookSql
                                             ');
 
             $stmt->execute();
-            while($assocRow = $stmt->fetch(PDO::FETCH_ASSOC))
+            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $result = [];
+            foreach ($data as $val)
             {
-                if(array_key_exists($assocRow['id'],$result))
+//                var_dump($val);
+                if (!isset($result[$val['id']]))
                 {
-                    if (!array_key_exists($assocRow['genreId'], $result[$assocRow['id']]['genres']))
-                    {
-                        $genre = ['id' => $assocRow['genreId'], 'name' => $assocRow['genreName']];
-                        $result[$assocRow['id']]['genres'][$assocRow['genreId']] = $genre;
-                    }
-                    if(!array_key_exists($assocRow['authorId'],$result[$assocRow['id']]['authors']))
-                    {
-                    $author = ['id'=>$assocRow['authorId'],'name'=>$assocRow['authorName'],
-                        'surname'=>$assocRow['surname']];
-                        $result[$assocRow['id']]['authors'][$assocRow['authorId']] = $author;
-                    }
-                } else
-                {
-                    $book['id'] = $assocRow['id'];
-                    $book['name'] = $assocRow['name'];
-                    $book['price'] = $assocRow['price'];
-                    $book['description'] = $assocRow['description'];
-                    $book['genres'][$assocRow['genreId']] = ['id'=>$assocRow['genreId'],'name'=>$assocRow['genreName']];
-                        $book['authors'][$assocRow['authorId']] = ['id'=>$assocRow['authorId'],'name'=>$assocRow['authorName'],
-                                    'surname'=>$assocRow['surname']];
-                    $book['discount'] = $assocRow['discount'];
-                    $result[$assocRow['id']] = $book;
+                    $result[$val['id']] = $val;
                 }
+                if ($result[$val['id']]['id'] == $val['id'])
+                {
+                    $result[$val['id']]['authors'][$val['authorId']] = ['id'=>$val['authorId'], 'name'=>$val['authorName'],'surname'=>$val['surname']];
+                    $result[$val['id']]['genres'][$val['genreId']] = ['id'=>$val['genreId'], 'name'=>$val['genreName']];
+                    unset($result[$val['id']]['authorId']);
+                    unset($result[$val['id']]['authorName']);
+                    unset($result[$val['id']]['surname']);
+                    unset($result[$val['id']]['genreId']);
+                    unset($result[$val['id']]['genreName']);
+                }
+                //Remove duplicate elements of a multidimensional array
+//                $result[$val['id']]['authors'] = array_map("unserialize", array_unique(array_map("serialize", $result[$val['id']]['authors'])));
+//                $result[$val['id']]['genres'] = array_map("unserialize", array_unique(array_map("serialize", $result[$val['id']]['genres'])));
             }
+            //Reindex arr
+//            $result = array_values($result);
+//            var_dump($result);
+            return $result;
+//            while($assocRow = $stmt->fetch(PDO::FETCH_ASSOC))
+//            {
+//                if(array_key_exists($assocRow['id'],$result))
+//                {
+//                    if (!array_key_exists($assocRow['genreId'], $result[$assocRow['id']]['genres']))
+//                    {
+//                        $genre = ['id' => $assocRow['genreId'], 'name' => $assocRow['genreName']];
+//                        $result[$assocRow['id']]['genres'][$assocRow['genreId']] = $genre;
+//                    }
+//                    if(!array_key_exists($assocRow['authorId'],$result[$assocRow['id']]['authors']))
+//                    {
+//                    $author = ['id'=>$assocRow['authorId'],'name'=>$assocRow['authorName'],
+//                        'surname'=>$assocRow['surname']];
+//                        $result[$assocRow['id']]['authors'][$assocRow['authorId']] = $author;
+//                    }
+//                } else
+//                {
+//                    $book['id'] = $assocRow['id'];
+//                    $book['name'] = $assocRow['name'];
+//                    $book['price'] = $assocRow['price'];
+//                    $book['description'] = $assocRow['description'];
+//                    $book['genres'][$assocRow['genreId']] = ['id'=>$assocRow['genreId'],'name'=>$assocRow['genreName']];
+//                        $book['authors'][$assocRow['authorId']] = ['id'=>$assocRow['authorId'],'name'=>$assocRow['authorName'],
+//                                    'surname'=>$assocRow['surname']];
+//                    $book['discount'] = $assocRow['discount'];
+//                    $result[$assocRow['id']] = $book;
+//                }
+//            }
         }else
         {
             $result = 'error';
@@ -268,3 +295,6 @@ class BookSql
         return $result;
     }
 }
+
+//$c = new BookSql();
+//$c->getAllBooks();

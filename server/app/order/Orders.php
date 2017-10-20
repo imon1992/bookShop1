@@ -52,14 +52,16 @@ class Orders
 
     public function getOrder($params = false)
     {
-        $params = explode('/',$params);
-//        var_dump($params);
-        $countParams = count($params);
+
+//            var_dump($params);
         if($params == false)
         {
-            $result = $this->orderSql->getPaymentSystems();
+            $result = $this->orderSql->getAllOrders();
         } else
         {
+            $params = explode('/',$params);
+//        var_dump($params);
+            $countParams = count($params);
             if($countParams == 1)
             {
                 $result = $this->orderSql->getOrdersInfoForUser($params[0]);
@@ -67,6 +69,20 @@ class Orders
             {
                 $result = $this->orderSql->getAdditionalOrdersInfoForUser($params[0],$params[1]);
             }
+        }
+
+        return $result;
+    }
+
+    public function putOrder($params = false)
+    {
+        if($params == false )
+        {
+            $putStr = file_get_contents('php://input');
+            $generatePutData = new GenerateData();
+            $putData = $generatePutData->generatePutData($putStr);
+
+            $result = $this->orderSql->updateOrderStatus($putData['orderId'],$putData['statusId']);
         }
 
         return $result;

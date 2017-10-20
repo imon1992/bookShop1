@@ -23,7 +23,7 @@ class Auths
             $isActive = json_decode($_POST['isActive']);
             if($isActive == null)
             {
-                $isActive = 'active';
+                $isActive = 1;
             }
             $discount = json_decode($_POST['discount']);
             if($discount == null)

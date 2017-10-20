@@ -74,9 +74,9 @@ class OrderSql
         if($this->dbConnect !== 'connect error')
         {
             $stmt =$this->dbConnect->prepare('
-SELECT uo.id,uo.createDate,uo.totalPrice,s.name 
-            FROM userOrder as uo, StatusOrder as s 
-                        WHERE uo.user_id = 7 and s.id = uo.status_id');
+                SELECT uo.id,uo.createDate,uo.totalPrice,s.name
+                FROM userOrder as uo, StatusOrder as s
+                WHERE uo.user_id = 7 and s.id = uo.status_id');
             $stmt->bindParam(':userId',$userId);
             $stmt->execute();
 
@@ -110,6 +110,48 @@ SELECT uo.id,uo.createDate,uo.totalPrice,s.name
             {
                 $result[] = $assocRow;
             }
+        }else
+        {
+            $result = 'error';
+        }
+
+        return $result;
+    }
+
+    public function getAllOrders()
+    {
+        if($this->dbConnect !== 'connect error')
+        {
+            $stmt =$this->dbConnect->prepare('
+                SELECT uo.id,uo.createDate,uo.totalPrice,s.name, s.id as statusId
+                FROM userOrder as uo, StatusOrder as s
+                WHERE s.id = uo.status_id
+                ');
+//            $stmt->bindParam(':userId',$userId);
+            $stmt->execute();
+
+            while($assocRow = $stmt->fetch(PDO::FETCH_ASSOC))
+            {
+                $result[] = $assocRow;
+            }
+        }else
+        {
+            $result = 'error';
+        }
+
+        return $result;
+    }
+
+    public function updateOrderStatus($orderId,$statusId)
+    {
+        if($this->dbConnect !== 'connect error')
+        {
+            $stmt =$this->dbConnect->prepare('UPDATE userOrder
+                                            SET status_id = :statusId
+                                            WHERE id = :id');
+            $stmt->bindParam(':statusId',$statusId);
+            $stmt->bindParam(':id',$orderId);
+            $result = $stmt->execute();
         }else
         {
             $result = 'error';
