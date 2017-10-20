@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Окт 19 2017 г., 15:56
+-- Время создания: Окт 20 2017 г., 15:53
 -- Версия сервера: 5.5.53
 -- Версия PHP: 5.5.38
 
@@ -14,7 +14,7 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!40101 SET NAMES utf8mb4 */;
 
 --
 -- База данных: `bookShop`
@@ -37,10 +37,11 @@ CREATE TABLE `Author` (
 --
 
 INSERT INTO `Author` (`id`, `name`, `surname`) VALUES
-(5, 'Bob', 'More'),
+(5, 'authorryaaa', 'new'),
 (6, 'Ben', 'Brown'),
 (7, 'Stiw', 'Jobssss'),
-(10, 'Bogdan', 'Stupka');
+(10, 'Bogdan', 'Stupka'),
+(11, 'Lina', 'Kostenko');
 
 -- --------------------------------------------------------
 
@@ -119,7 +120,8 @@ CREATE TABLE `BookGenre` (
 INSERT INTO `BookGenre` (`id`, `book_id`, `genre_id`) VALUES
 (2, 2, 2),
 (3, 3, 2),
-(5, 1, 1);
+(5, 1, 1),
+(6, 1, 2);
 
 -- --------------------------------------------------------
 
@@ -149,9 +151,10 @@ INSERT INTO `Client` (`id`, `name`, `surname`, `phone`, `email`, `login`, `passw
 (1, NULL, NULL, NULL, NULL, '', '74be16979710d4c4e7c6', '', 0, 0, 'admin'),
 (4, NULL, NULL, NULL, NULL, 'test', 'ec6a6536ca304edf844d1d248a4f08dc', '1ba249876eaa33de5a52c29ed739c934', 0, 0, 'admin'),
 (6, 'Andrew', 'Kolotii', '0975998789', 'imon@mksat.net', 'imon', 'bb46977affa222b1237af74ec23c45a1', 'ae459b17c2534f5c9b35430b72ec498b', 0, 0, 'user'),
-(7, 'imon', 'dsfsdfsd', '948468548546', 'imon@mksat.net', 'imonX', 'ec6a6536ca304edf844d1d248a4f08dc', 'b704aab28ee09fc4a7cb05579e8eb70a', 5, 1, 'user'),
+(7, 'imon', 'dsfsdfsd', '948468548546', 'imon@mksat.net', 'imonX', 'ec6a6536ca304edf844d1d248a4f08dc', '740e6378ed10fde7904fdbccfeb6ac3c', 5, 1, 'user'),
 (8, 'NormA', 'Norms', '354353453534', 'imon@mksat.net', 'norm', 'ec6a6536ca304edf844d1d248a4f08dc', 'c994123fb4a50bb4cc178fc0dc74abbb', 0, 0, 'user'),
-(9, 'John', 'Smith', '5236854689', 'imon@mksat.net', 'testAsd', '2952e1846b4ea765dfd0fdfcb7e21097', '', 5, 0, 'user');
+(9, 'John', 'Smith', '5236854689', 'imon@mksat.net', 'testAsd', '2952e1846b4ea765dfd0fdfcb7e21097', '', 5, 0, 'user'),
+(10, 'asde', 'asde', '3698745632', 'imon@mksat.net', 'asde', 'd8e3d85962958758d3a29dd1ecb0800a', '52e0b935edf78c3b342d25f7630aa5e8', 0, 1, 'user');
 
 -- --------------------------------------------------------
 
@@ -210,7 +213,10 @@ CREATE TABLE `orderPart` (
 
 INSERT INTO `orderPart` (`id`, `book_id`, `order_id`, `user_id`, `count`, `bookPrice`, `bookDiscount`) VALUES
 (1, 1, 1, 7, 1, 250, 4),
-(2, 2, 1, 7, 1, 500, 3);
+(2, 2, 1, 7, 1, 500, 3),
+(3, 1, 2, 7, 3, 250, 4),
+(4, 2, 2, 7, 1, 500, 3),
+(5, 1, 3, 10, 4, 250, 4);
 
 -- --------------------------------------------------------
 
@@ -247,7 +253,9 @@ CREATE TABLE `StatusOrder` (
 --
 
 INSERT INTO `StatusOrder` (`id`, `name`) VALUES
-(1, 'In Process');
+(1, 'In Process'),
+(2, 'Done'),
+(3, 'In transit');
 
 -- --------------------------------------------------------
 
@@ -270,7 +278,9 @@ CREATE TABLE `userOrder` (
 --
 
 INSERT INTO `userOrder` (`id`, `user_id`, `payment_id`, `status_id`, `createDate`, `totalPrice`, `userDiscount`) VALUES
-(1, 7, 1, 1, '2017-10-19 13:34:43', 689, 5);
+(1, 7, 1, 1, '2017-10-19 13:34:43', 689, 5),
+(2, 7, 2, 2, '2017-10-20 12:19:23', 1144.75, 5),
+(3, 10, 2, 1, '2017-10-20 14:19:36', 960, 0);
 
 --
 -- Индексы сохранённых таблиц
@@ -366,12 +376,12 @@ ALTER TABLE `userOrder`
 -- AUTO_INCREMENT для таблицы `Author`
 --
 ALTER TABLE `Author`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 --
 -- AUTO_INCREMENT для таблицы `Bag`
 --
 ALTER TABLE `Bag`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT для таблицы `Book`
 --
@@ -386,12 +396,12 @@ ALTER TABLE `BookAuthor`
 -- AUTO_INCREMENT для таблицы `BookGenre`
 --
 ALTER TABLE `BookGenre`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT для таблицы `Client`
 --
 ALTER TABLE `Client`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT для таблицы `Genre`
 --
@@ -406,7 +416,7 @@ ALTER TABLE `HistoryBook`
 -- AUTO_INCREMENT для таблицы `orderPart`
 --
 ALTER TABLE `orderPart`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT для таблицы `Payment`
 --
@@ -416,12 +426,12 @@ ALTER TABLE `Payment`
 -- AUTO_INCREMENT для таблицы `StatusOrder`
 --
 ALTER TABLE `StatusOrder`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT для таблицы `userOrder`
 --
 ALTER TABLE `userOrder`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- Ограничения внешнего ключа сохраненных таблиц
 --
