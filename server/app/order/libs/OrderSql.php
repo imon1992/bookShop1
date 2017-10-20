@@ -74,9 +74,9 @@ class OrderSql
         if($this->dbConnect !== 'connect error')
         {
             $stmt =$this->dbConnect->prepare('
-                SELECT uo.id,uo.createDate,uo.totalPrice,s.name
+                SELECT uo.id,uo.createDate,uo.totalPrice,s.name,s.id as statusId
                 FROM userOrder as uo, StatusOrder as s
-                WHERE uo.user_id = 7 and s.id = uo.status_id');
+                WHERE uo.user_id = :userId and s.id = uo.status_id');
             $stmt->bindParam(':userId',$userId);
             $stmt->execute();
 
