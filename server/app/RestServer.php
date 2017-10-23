@@ -1,13 +1,7 @@
 <?php
 require_once('Autoloader.php');
 spl_autoload_register(array('Autoloader', 'loadPackages'));
-//include ('GenerateData.php');
-//include ('author/Authors.php');
-//include ('author/libs/AuthorSql.php');
-//include ('genre/Genres.php');
-//include ('genre/libs/GenreSql.php');
-//include ('book/Books.php');
-//include ('book/libs/BookSql.php');
+
 include ('config.php');
 
 class RestServer
@@ -32,8 +26,6 @@ class RestServer
 
     public function run()
     {
-//        echo json_encode($this->requestMethod);
-        //return $this->requestMethod;
         list($s, $user, $REST, $server, $api, $dir, $params) = explode("/", $this->url, 7);
         $this->classCreate($dir);
 
@@ -45,14 +37,10 @@ class RestServer
                 return $this->setMethod('post' . ucfirst($dir), '');
                 break;
             case 'PUT':
-                //return 1;
-//return $this->requestMethod;
                 return $this->setMethod('put' . ucfirst($dir), '');
                 break;
             case 'DELETE':
-//                return $this->url;
                 return $this->setMethod('delete' . ucfirst($dir), $params);
-//                $this->sendHeaders(501);
                 break;
             //default:
               //  $this->sendHeaders(501);
@@ -61,9 +49,6 @@ class RestServer
 
     protected function setMethod($classMethod, $params)
     {
-//return $classMethod;
-//var_dump($params);
-//var_dump($classMethod);
         if (method_exists($this->class, $classMethod)) {
             if(is_string($params) || is_array($params)){
                 $result = $this->class->$classMethod($params);

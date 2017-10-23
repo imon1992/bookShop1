@@ -1,5 +1,4 @@
 <?php
-//include('../../config.php');
 
 class UserSql
 {
@@ -22,7 +21,7 @@ class UserSql
         $result = [];
         if($this->dbConnect !== 'connect error')
         {
-            $stmt =$this->dbConnect->prepare('SELECT *
+            $stmt =$this->dbConnect->prepare('SELECT id,name,surname
                                                 FROM Client
                                             ');
             $stmt->execute();
@@ -43,7 +42,7 @@ class UserSql
         $result = [];
         if($this->dbConnect !== 'connect error')
         {
-            $stmt =$this->dbConnect->prepare('SELECT c.id,c.name,c.surname,c.phone,c.email,c.login
+            $stmt =$this->dbConnect->prepare('SELECT c.id,c.name,c.surname,c.phone,c.email,c.login,c.discount,c.role,c.isActive
                 FROM Client as c
                 WHERE id=:id
                 ');

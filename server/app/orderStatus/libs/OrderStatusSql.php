@@ -1,5 +1,4 @@
 <?php
-//include('../../config.php');
 
 class OrderStatusSql
 {
@@ -22,7 +21,6 @@ class OrderStatusSql
         $result = [];
         if($this->dbConnect !== 'connect error')
         {
-//            var_dump($this->dbConnect);
             $stmt =$this->dbConnect->prepare("
             SELECT *
             FROM StatusOrder

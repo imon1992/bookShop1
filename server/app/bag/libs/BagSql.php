@@ -1,5 +1,4 @@
 <?php
-//include('../../config.php');
 
 class BagSql
 {
@@ -35,18 +34,18 @@ class BagSql
         return $result;
     }
 
-    public function deleteFromBag($userId,$bookIds)
+    public function deleteFromBag($userId,$ids)
     {
         if($this->dbConnect !== 'connect error')
         {
             $stmt =$this->dbConnect->prepare('
                 DELETE
                 FROM Bag
-                WHERE book_id = :bookId AND client_id = :clientId
+                WHERE id = :id AND client_id = :clientId
                 ');
-            foreach($bookIds as &$bookId)
+            foreach($ids as &$id)
             {
-                $stmt->bindParam(':bookId',$bookId);
+                $stmt->bindParam(':id',$id);
                 $stmt->bindParam(':clientId',$userId);
                 $result = $stmt->execute();
             }
@@ -60,9 +59,10 @@ class BagSql
 
     public function getUserBag($id)
     {
+        $result=[];
         if($this->dbConnect !== 'connect error')
         {
-            $stmt =$this->dbConnect->prepare('SELECT b.id,g.count,b.name,b.price,b.discount as bookDiscount, c.discount as clientDiscount
+            $stmt =$this->dbConnect->prepare('SELECT b.id,g.count,b.name,b.price,b.discount as bookDiscount, c.discount as clientDiscount,g.id as bagId
                                              FROM Bag as g
                                              INNER join Book as b on b.id = g.book_id
                                              INNER JOIN Client as c on c.id = g.client_id
@@ -74,7 +74,7 @@ class BagSql
             while($assocRow = $stmt->fetch(PDO::FETCH_ASSOC))
             {
                 $assocRow['posNumber'] = $i;
-                $result[] = $assocRow;
+                $result[$assocRow['bagId']] = $assocRow;
                 $i++;
             }
 
@@ -112,13 +112,10 @@ class BagSql
             $stmt =$this->dbConnect->prepare('UPDATE Bag
                                             SET count = :count
                                             WHERE book_id = :bookId AND client_id = :clientId');
-//            foreach($newGenres as $key=>&$genreId)
-//            {
                 $stmt->bindParam(':count',$count);
                 $stmt->bindParam(':bookId',$bookId);
                 $stmt->bindParam(':clientId',$userId);
                 $result = $stmt->execute();
-//            }
         }else
         {
             $result = 'error';

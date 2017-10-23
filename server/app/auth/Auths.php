@@ -113,12 +113,6 @@ class Auths
         return $result;
     }
 
-    public function deleteAuth()
-    {
-        $result = session_destroy();
-        return $result;
-    }
-
     private function generateCode($length = 6)
     {
         $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHI JKLMNOPRQSTUVWXYZ0123456789";
@@ -132,6 +126,3 @@ class Auths
     }
 
 }
-
-//$c = new Auth();
-//$x = $c->getAuth();

@@ -1,5 +1,4 @@
 <?php
-//include('../../config.php');
 
 class PaymentSystemSql
 {
@@ -26,7 +25,6 @@ class PaymentSystemSql
             SELECT *
             FROM Payment
             ");
-//            $stmt->bindParam(':id',$id);
             $stmt->execute();
             while($assocRow = $stmt->fetch(PDO::FETCH_ASSOC))
             {

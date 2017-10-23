@@ -83,7 +83,6 @@ class AuthSql
 
     public function setNewHash($hash,$id)
     {
-        //        mysql_query("UPDATE Client SET hash='".$hash."' "." WHERE id='".$data['id']."'");
         if($this->dbConnect !== 'connect error')
         {
             $stmt =$this->dbConnect->prepare('UPDATE Client
@@ -121,8 +120,6 @@ class AuthSql
 
     public function checkUserLogin($login)
     {
-        //        var_dump($login);
-        //        $query = mysql_query("SELECT COUNT(user_id) FROM Client WHERE user_login='".mysql_real_escape_string($_POST['login'])."'");
         if($this->dbConnect !== 'connect error')
         {
             $stmt =$this->dbConnect->prepare('SELECT COUNT(id)
@@ -139,4 +136,40 @@ class AuthSql
         }
     }
 
+    public function checkAdminHash($hash)
+    {
+        if($this->dbConnect !== 'connect error')
+        {
+            $stmt =$this->dbConnect->prepare('SELECT COUNT(id)
+                FROM Client
+                WHERE hash=:hash AND role=\'admin\'');
+
+            $stmt->bindParam(':hash',$hash);
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $result['COUNT(id)'];
+        }else
+        {
+            return 'error';
+        }
+    }
+
+    public function checkUserHash($hash,$id)
+    {
+        if($this->dbConnect !== 'connect error')
+        {
+            $stmt =$this->dbConnect->prepare('SELECT COUNT(id)
+                FROM Client
+                WHERE hash=:hash AND id=:id');
+
+            $stmt->bindParam(':hash',$hash);
+            $stmt->bindParam(':id',$id);
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $result['COUNT(id)'];
+        }else
+        {
+            return 'error';
+        }
+    }
 }

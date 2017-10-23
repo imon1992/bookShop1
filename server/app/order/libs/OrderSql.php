@@ -1,5 +1,4 @@
 <?php
-//include('../../config.php');
 
 class OrderSql
 {
@@ -33,7 +32,6 @@ class OrderSql
                $stmt->bindParam(':userDiscount',$userDisc);
                $stmt->bindParam(':userId',$userId);
                $result = $stmt->execute();
-           $result = $this->dbConnect->lastInsertId();
        }else
        {
            $result = 'error';
@@ -44,7 +42,6 @@ class OrderSql
 
     public function addOrderPart($userId,$params,$orderId)
     {
-//        var_dump($params);
         if($this->dbConnect !== 'connect error')
         {
             $stmt =$this->dbConnect->prepare('
@@ -92,7 +89,7 @@ class OrderSql
         return $result;
     }
 
-    public function getAdditionalOrdersInfoForUser($userId,$orderId)
+    public function getAdditionalOrdersInfoForUser($status,$orderId)
     {
         if($this->dbConnect !== 'connect error')
         {
@@ -100,9 +97,10 @@ class OrderSql
             SELECT op.count,op.bookPrice,op.bookDiscount,b.name
             FROM orderPart as op
             INNER JOIN Book as b on b.id = op.book_id
-            WHERE op.user_id = :userId AND op.order_id = :orderId
+            INNER JOIN userOrder as uo on uo.id = op.order_id
+            WHERE uo.status_id = :createDate AND op.order_id = :orderId
             ');
-            $stmt->bindParam(':userId',$userId);
+            $stmt->bindParam(':createDate',$status);
             $stmt->bindParam(':orderId',$orderId);
             $stmt->execute();
 
@@ -127,7 +125,6 @@ class OrderSql
                 FROM userOrder as uo, StatusOrder as s
                 WHERE s.id = uo.status_id
                 ');
-//            $stmt->bindParam(':userId',$userId);
             $stmt->execute();
 
             while($assocRow = $stmt->fetch(PDO::FETCH_ASSOC))

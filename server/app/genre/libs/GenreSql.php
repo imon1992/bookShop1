@@ -1,5 +1,4 @@
 <?php
-//include('config.php');
 
 class GenreSql
 {
@@ -42,6 +41,29 @@ class GenreSql
                                             FROM Genre
                                             ');
 
+            $stmt->execute();
+            while($assocRow = $stmt->fetch(PDO::FETCH_ASSOC))
+            {
+                $result[$assocRow['id']]=$assocRow;
+            }
+        }else
+        {
+            $result = 'error';
+        }
+
+        return $result;
+    }
+
+    public function getGenre($id)
+    {
+        $result = [];
+        if($this->dbConnect !== 'connect error')
+        {
+            $stmt =$this->dbConnect->prepare('SELECT *
+                                            FROM Genre
+                                            WHERE id=:id
+                                            ');
+            $stmt->bindParam(':id',$id);
             $stmt->execute();
             while($assocRow = $stmt->fetch(PDO::FETCH_ASSOC))
             {

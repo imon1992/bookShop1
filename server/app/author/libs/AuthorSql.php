@@ -1,5 +1,4 @@
 <?php
-//include('config.php');
 
 class AuthorSql
 {
@@ -74,28 +73,29 @@ class AuthorSql
         return $result;
     }
 
-//    public function getAuthorById($id)
-//    {
-//        $result = [];
-//        if($this->dbConnect !== 'connect error')
-//        {
-//            $stmt =$this->dbConnect->prepare('SELECT *
-//                                            FROM Author
-//                                            WHERE id = :id
-//                                            ');
-//            $stmt->bindParam(':id',$id);
-//            $stmt->execute();
-//            while($assocRow = $stmt->fetch(PDO::FETCH_ASSOC))
-//            {
-//                $result[]=$assocRow;
-//            }
-//        }else
-//        {
-//            $result = 'error';
-//        }
-//
-//        return $result;
-//    }
+    public function getAuthor($id)
+    {
+        $result = [];
+        if($this->dbConnect !== 'connect error')
+        {
+            $stmt =$this->dbConnect->prepare('SELECT *
+                                            FROM Author
+                                            WHERE id=:id
+                                            ');
+            $stmt->bindParam(':id',$id);
+            $stmt->execute();
+            while($assocRow = $stmt->fetch(PDO::FETCH_ASSOC))
+            {
+                $result[$assocRow['id']]=$assocRow;
+            }
+        }else
+        {
+            $result = 'error';
+        }
+
+        return $result;
+    }
+
 
     public function deleteAuthor($id)
     {
