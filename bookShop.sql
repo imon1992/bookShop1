@@ -14,7 +14,7 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+/*!40101 SET NAMES utf8 */;
 
 --
 -- База данных: `bookShop`
@@ -420,35 +420,35 @@ ALTER TABLE `userOrder`
 -- Ограничения внешнего ключа таблицы `bag`
 --
 ALTER TABLE `bag`
-  ADD CONSTRAINT `book_id` FOREIGN KEY (`book_id`) REFERENCES `Book` (`id`),
-  ADD CONSTRAINT `client_id` FOREIGN KEY (`client_id`) REFERENCES `Client` (`id`);
+  ADD CONSTRAINT `book_id` FOREIGN KEY (`book_id`) REFERENCES `book` (`id`),
+  ADD CONSTRAINT `client_id` FOREIGN KEY (`client_id`) REFERENCES `client` (`id`);
 
 --
 -- Ограничения внешнего ключа таблицы `bookAuthor`
 --
 ALTER TABLE `bookAuthor`
-  ADD CONSTRAINT `BookAuthor_fk0` FOREIGN KEY (`book_id`) REFERENCES `Book` (`id`),
-  ADD CONSTRAINT `BookAuthor_fk1` FOREIGN KEY (`author_id`) REFERENCES `Author` (`id`);
+  ADD CONSTRAINT `BookAuthor_fk0` FOREIGN KEY (`book_id`) REFERENCES `book` (`id`),
+  ADD CONSTRAINT `BookAuthor_fk1` FOREIGN KEY (`author_id`) REFERENCES `author` (`id`);
 
 --
 -- Ограничения внешнего ключа таблицы `bookGenre`
 --
 ALTER TABLE `bookGenre`
-  ADD CONSTRAINT `BookGenre_fk0` FOREIGN KEY (`book_id`) REFERENCES `Book` (`id`),
-  ADD CONSTRAINT `BookGenre_fk1` FOREIGN KEY (`genre_id`) REFERENCES `Genre` (`id`);
+  ADD CONSTRAINT `BookGenre_fk0` FOREIGN KEY (`book_id`) REFERENCES `book` (`id`),
+  ADD CONSTRAINT `BookGenre_fk1` FOREIGN KEY (`genre_id`) REFERENCES `genre` (`id`);
 
 --
 -- Ограничения внешнего ключа таблицы `orderPart`
 --
 ALTER TABLE `orderPart`
-  ADD CONSTRAINT `bookId` FOREIGN KEY (`book_id`) REFERENCES `Book` (`id`);
+  ADD CONSTRAINT `bookId` FOREIGN KEY (`book_id`) REFERENCES `book` (`id`);
 
 --
 -- Ограничения внешнего ключа таблицы `userOrder`
 --
 ALTER TABLE `userOrder`
-  ADD CONSTRAINT `paymentStatus` FOREIGN KEY (`payment_id`) REFERENCES `Payment` (`id`),
-  ADD CONSTRAINT `status` FOREIGN KEY (`status_id`) REFERENCES `StatusOrder` (`id`);
+  ADD CONSTRAINT `paymentStatus` FOREIGN KEY (`payment_id`) REFERENCES `payment` (`id`),
+  ADD CONSTRAINT `status` FOREIGN KEY (`status_id`) REFERENCES `statusOrder` (`id`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

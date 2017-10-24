@@ -20,7 +20,7 @@ class BagSql
     {
         if($this->dbConnect !== 'connect error')
         {
-            $stmt =$this->dbConnect->prepare('INSERT INTO Bag(book_id,client_id,count)
+            $stmt =$this->dbConnect->prepare('INSERT INTO bag(book_id,client_id,count)
                                               VALUES(:bookId,:clientId,:count)');
             $stmt->bindParam(':bookId',$bookId);
             $stmt->bindParam(':clientId',$clientId);
@@ -40,7 +40,7 @@ class BagSql
         {
             $stmt =$this->dbConnect->prepare('
                 DELETE
-                FROM Bag
+                FROM bag
                 WHERE id = :id AND client_id = :clientId
                 ');
             foreach($ids as &$id)
@@ -63,9 +63,9 @@ class BagSql
         if($this->dbConnect !== 'connect error')
         {
             $stmt =$this->dbConnect->prepare('SELECT b.id,g.count,b.name,b.price,b.discount as bookDiscount, c.discount as clientDiscount,g.id as bagId
-                                             FROM Bag as g
-                                             INNER join Book as b on b.id = g.book_id
-                                             INNER JOIN Client as c on c.id = g.client_id
+                                             FROM bag as g
+                                             INNER join book as b on b.id = g.book_id
+                                             INNER JOIN client as c on c.id = g.client_id
                                              Where client_id = :id
                                             ');
             $stmt->bindParam(':id',$id);
@@ -92,7 +92,7 @@ class BagSql
         {
             $stmt =$this->dbConnect->prepare('
                 DELETE
-                FROM Bag
+                FROM bag
                 WHERE client_id = :userId
                 ');
                 $stmt->bindParam(':userId',$userId);
@@ -109,7 +109,7 @@ class BagSql
     {
         if($this->dbConnect !== 'connect error')
         {
-            $stmt =$this->dbConnect->prepare('UPDATE Bag
+            $stmt =$this->dbConnect->prepare('UPDATE bag
                                             SET count = :count
                                             WHERE book_id = :bookId AND client_id = :clientId');
                 $stmt->bindParam(':count',$count);

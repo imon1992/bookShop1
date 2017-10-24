@@ -23,7 +23,7 @@ class PaymentSystemSql
         {
             $stmt =$this->dbConnect->prepare("
             SELECT *
-            FROM Payment
+            FROM payment
             ");
             $stmt->execute();
             while($assocRow = $stmt->fetch(PDO::FETCH_ASSOC))

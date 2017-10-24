@@ -31,7 +31,8 @@ class OrderSql
                $stmt->bindParam(':totalPrice',$totalPrice);
                $stmt->bindParam(':userDiscount',$userDisc);
                $stmt->bindParam(':userId',$userId);
-               $result = $stmt->execute();
+               $stmt->execute();
+               $result = $this->dbConnect->lastInsertId();
        }else
        {
            $result = 'error';
@@ -72,7 +73,7 @@ class OrderSql
         {
             $stmt =$this->dbConnect->prepare('
                 SELECT uo.id,uo.createDate,uo.totalPrice,s.name,s.id as statusId
-                FROM userOrder as uo, StatusOrder as s
+                FROM userOrder as uo, statusOrder as s
                 WHERE uo.user_id = :userId and s.id = uo.status_id');
             $stmt->bindParam(':userId',$userId);
             $stmt->execute();
@@ -96,7 +97,7 @@ class OrderSql
             $stmt =$this->dbConnect->prepare('
             SELECT op.count,op.bookPrice,op.bookDiscount,b.name
             FROM orderPart as op
-            INNER JOIN Book as b on b.id = op.book_id
+            INNER JOIN book as b on b.id = op.book_id
             INNER JOIN userOrder as uo on uo.id = op.order_id
             WHERE uo.status_id = :createDate AND op.order_id = :orderId
             ');
@@ -122,7 +123,7 @@ class OrderSql
         {
             $stmt =$this->dbConnect->prepare('
                 SELECT uo.id,uo.createDate,uo.totalPrice,s.name, s.id as statusId
-                FROM userOrder as uo, StatusOrder as s
+                FROM userOrder as uo, statusOrder as s
                 WHERE s.id = uo.status_id
                 ');
             $stmt->execute();

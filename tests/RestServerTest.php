@@ -16,7 +16,7 @@ class RestServerTest extends PHPUnit_Framework_TestCase
     }
     public function setUp()
     {
-        $this->http = new GuzzleHttp\Client(['base_uri' => 'http://bookshop/user14/bookShopRest/client/api/']);
+        $this->http = new GuzzleHttp\Client(['base_uri' => 'http://192.168.0.15/~user14/bookShop1/client/api/']);
     }
 
     public function tearDown() {

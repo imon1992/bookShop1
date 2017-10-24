@@ -20,7 +20,7 @@ class GenreSql
     {
         if($this->dbConnect !== 'connect error')
         {
-            $stmt =$this->dbConnect->prepare('INSERT INTO Genre(name)
+            $stmt =$this->dbConnect->prepare('INSERT INTO genre(name)
                                               VALUES(:name)');
             $stmt->bindParam(':name',$name);
             $result = $stmt->execute();
@@ -38,7 +38,7 @@ class GenreSql
         if($this->dbConnect !== 'connect error')
         {
             $stmt =$this->dbConnect->prepare('SELECT *
-                                            FROM Genre
+                                            FROM genre
                                             ');
 
             $stmt->execute();
@@ -60,7 +60,7 @@ class GenreSql
         if($this->dbConnect !== 'connect error')
         {
             $stmt =$this->dbConnect->prepare('SELECT *
-                                            FROM Genre
+                                            FROM genre
                                             WHERE id=:id
                                             ');
             $stmt->bindParam(':id',$id);
@@ -81,7 +81,7 @@ class GenreSql
     {
         if($this->dbConnect !== 'connect error')
         {
-            $stmt =$this->dbConnect->prepare('UPDATE Genre
+            $stmt =$this->dbConnect->prepare('UPDATE genre
                                             SET name = :name
                                             WHERE id = :id');
             $stmt->bindParam(':name',$name);
@@ -101,7 +101,7 @@ class GenreSql
         if($this->dbConnect !== 'connect error')
         {
             $stmt =$this->dbConnect->prepare('DELETE
-                                            FROM Genre
+                                            FROM genre
                                             WHERE id = :id');
             $stmt->bindParam(':id',$id);
             $result = $stmt->execute();
@@ -118,7 +118,7 @@ class GenreSql
         if($this->dbConnect !== 'connect error')
         {
             $stmt =$this->dbConnect->prepare('DELETE
-                                            FROM BookGenre
+                                            FROM bookGenre
                                             WHERE genre_id = :id');
             $stmt->bindParam(':id',$id);
             $result = $stmt->execute();

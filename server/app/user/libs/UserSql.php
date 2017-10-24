@@ -22,7 +22,7 @@ class UserSql
         if($this->dbConnect !== 'connect error')
         {
             $stmt =$this->dbConnect->prepare('SELECT id,name,surname
-                                                FROM Client
+                                                FROM client
                                             ');
             $stmt->execute();
             while($assocRow = $stmt->fetch(PDO::FETCH_ASSOC))
@@ -43,7 +43,7 @@ class UserSql
         if($this->dbConnect !== 'connect error')
         {
             $stmt =$this->dbConnect->prepare('SELECT c.id,c.name,c.surname,c.phone,c.email,c.login,c.discount,c.role,c.isActive
-                FROM Client as c
+                FROM client as c
                 WHERE id=:id
                 ');
             $stmt->bindParam(':id',$id);
@@ -88,7 +88,7 @@ class UserSql
     {
         $arrLength = count($params);
         $i = 1;
-        $sql = 'UPDATE Client SET ';
+        $sql = 'UPDATE client SET ';
 
         foreach($params as $key=>$val)
         {

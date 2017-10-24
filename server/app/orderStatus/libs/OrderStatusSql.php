@@ -23,7 +23,7 @@ class OrderStatusSql
         {
             $stmt =$this->dbConnect->prepare("
             SELECT *
-            FROM StatusOrder
+            FROM statusOrder
             ");
             $stmt->execute();
             while($assocRow = $stmt->fetch(PDO::FETCH_ASSOC))

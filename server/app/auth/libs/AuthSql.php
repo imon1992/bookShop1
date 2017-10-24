@@ -19,7 +19,7 @@ class AuthSql
     {
         if($this->dbConnect !== 'connect error')
         {
-            $stmt =$this->dbConnect->prepare('INSERT INTO Client(name,surname,phone,email,login,password,discount,isActive,role)
+            $stmt =$this->dbConnect->prepare('INSERT INTO client(name,surname,phone,email,login,password,discount,isActive,role)
                 VALUES(:name,:surname,:phone,:email,:login,:password,:discount,:isActive,:role)');
             $stmt->bindParam(':name',$name);
             $stmt->bindParam(':surname',$surname);
@@ -44,7 +44,7 @@ class AuthSql
         if($this->dbConnect !== 'connect error')
         {
             $stmt =$this->dbConnect->prepare('SELECT id,password,role,isActive
-                FROM Client
+                FROM client
                 WHERE login=:login');
 
             $stmt->bindParam(':login',$login);
@@ -65,7 +65,7 @@ class AuthSql
         if($this->dbConnect !== 'connect error')
         {
             $stmt =$this->dbConnect->prepare('SELECT hash,id
-                FROM Client
+                FROM client
                 WHERE id=:id');
 
             $stmt->bindParam(':id',$id);
@@ -85,7 +85,7 @@ class AuthSql
     {
         if($this->dbConnect !== 'connect error')
         {
-            $stmt =$this->dbConnect->prepare('UPDATE Client
+            $stmt =$this->dbConnect->prepare('UPDATE client
                 SET hash= :hash
                 WHERE id=:id');
 
@@ -104,7 +104,7 @@ class AuthSql
         if($this->dbConnect !== 'connect error')
         {
             $stmt =$this->dbConnect->prepare('SELECT id
-                FROM Client
+                FROM client
                 WHERE login=:login AND password=:password');
 
             $stmt->bindParam(':login',$login);
@@ -123,7 +123,7 @@ class AuthSql
         if($this->dbConnect !== 'connect error')
         {
             $stmt =$this->dbConnect->prepare('SELECT COUNT(id)
-                FROM Client
+                FROM client
                 WHERE login=:login');
 
             $stmt->bindParam(':login',$login);
@@ -141,7 +141,7 @@ class AuthSql
         if($this->dbConnect !== 'connect error')
         {
             $stmt =$this->dbConnect->prepare('SELECT COUNT(id)
-                FROM Client
+                FROM client
                 WHERE hash=:hash AND role=\'admin\'');
 
             $stmt->bindParam(':hash',$hash);
@@ -159,7 +159,7 @@ class AuthSql
         if($this->dbConnect !== 'connect error')
         {
             $stmt =$this->dbConnect->prepare('SELECT COUNT(id)
-                FROM Client
+                FROM client
                 WHERE hash=:hash AND id=:id');
 
             $stmt->bindParam(':hash',$hash);

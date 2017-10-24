@@ -20,7 +20,7 @@ class AuthorSql
     {
         if($this->dbConnect !== 'connect error')
         {
-            $stmt =$this->dbConnect->prepare('INSERT INTO Author(name,surname)
+            $stmt =$this->dbConnect->prepare('INSERT INTO author(name,surname)
                                               VALUES(:name,:surname)');
             $stmt->bindParam(':name',$name);
             $stmt->bindParam(':surname',$surname);
@@ -37,7 +37,7 @@ class AuthorSql
     {
         if($this->dbConnect !== 'connect error')
         {
-            $stmt =$this->dbConnect->prepare('UPDATE Author
+            $stmt =$this->dbConnect->prepare('UPDATE author
                                             SET name = :name,surname=:surname
                                             WHERE id = :id');
             $stmt->bindParam(':name',$name);
@@ -58,7 +58,7 @@ class AuthorSql
         if($this->dbConnect !== 'connect error')
         {
             $stmt =$this->dbConnect->prepare('SELECT *
-                                            FROM Author
+                                            FROM author
                                             ');
             $stmt->execute();
             while($assocRow = $stmt->fetch(PDO::FETCH_ASSOC))
@@ -79,7 +79,7 @@ class AuthorSql
         if($this->dbConnect !== 'connect error')
         {
             $stmt =$this->dbConnect->prepare('SELECT *
-                                            FROM Author
+                                            FROM author
                                             WHERE id=:id
                                             ');
             $stmt->bindParam(':id',$id);
@@ -102,7 +102,7 @@ class AuthorSql
         if($this->dbConnect !== 'connect error')
         {
             $stmt =$this->dbConnect->prepare('DELETE
-                                            FROM Author
+                                            FROM author
                                             WHERE id = :id');
             $stmt->bindParam(':id',$id);
             $result = $stmt->execute();
@@ -119,7 +119,7 @@ class AuthorSql
         if($this->dbConnect !== 'connect error')
         {
             $stmt =$this->dbConnect->prepare('DELETE
-                                            FROM BookAuthor
+                                            FROM bookAuthor
                                             WHERE author_id = :id');
             $stmt->bindParam(':id',$id);
             $result = $stmt->execute();
