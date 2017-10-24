@@ -64,7 +64,6 @@ class Genres
 
     public function putGenre($params)
     {
-
         if($params == false )
     {
         $putStr = file_get_contents('php://input');

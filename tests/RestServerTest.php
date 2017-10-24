@@ -1,6 +1,8 @@
 <?php
 
-include ('GetHashForrTest.php');
+include ('SqlForTest.php');
+include ('../../server/app/config.php');
+//include ('../../server/app/genre/libs/GenreSql.php');
 
 class RestServerTest extends PHPUnit_Framework_TestCase
 {
@@ -8,7 +10,7 @@ class RestServerTest extends PHPUnit_Framework_TestCase
     private $hash;
     public function __construct()
     {
-        $db = new GetHashForrTest();
+        $db = new SqlForTest();
         $result = $db->getHash();
         $this->hash = $result[0]['hash'];
     }
@@ -125,28 +127,39 @@ class RestServerTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($validJson);
     }
 
-    public function testUpdateGenre()
-    {
-        var_dump($this->hash);
-        $response = $this->http->request('PUT', 'genre/',[                'hash' => $this->hash,
-                'id' => '8',
-                'name' => 'newName'
-        ]);
-//            'form_params' => [
-//                'hash' => $this->hash,
+//    public function testUpdateGenre()
+//    {
+////        $ch = curl_init($this->url.'genre/');
+////        curl_setopt($ch, CURLOPT_PUT, true);
+////        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+////        $fields = array("hash" => json_decode($this->hash),
+////            "id"=>json_decode(8),
+////            'name'=>json_decode('updateName'));
+////        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($fields));
+////        $response = curl_exec($ch);
+////        var_dump($response);
+//        $hash = json_decode($this->hash);
+//        var_dump($hash);
+//        $response = $this->http->request('PUT', 'genre/',['form_params' => [
+//                'hash' =>json_encode("026b914da592d805adecb2c4eb597572"),
 //                'id' => '8',
 //                'name' => 'newName'
-//            ]
-var_dump($this->http->request('PUT', 'genre/'));
-        $this->assertEquals(200, $response->getStatusCode());
-
-        $contentType = $response->getHeaders()["Content-Type"][0];
-        $this->assertEquals("application/json", $contentType);
-
-        $json = json_encode(json_decode($response->getBody()));
-        var_dump($json);
+//            ]]);
+////            'form_params' => [
+////                'hash' => $this->hash,
+////                'id' => '8',
+////                'name' => 'newName'
+////            ]
+////var_dump($this->http->request('PUT', 'genre/'));
+//        $this->assertEquals(200, $response->getStatusCode());
+//
+//        $contentType = $response->getHeaders()["Content-Type"][0];
+//        $this->assertEquals("application/json", $contentType);
+//
+//        $json = json_encode(json_decode($response->getBody()));
+////        var_dump($json);
 //        $validJson = ((is_string($json) && (is_object(json_decode($json)) || is_array(json_decode($json))))) ? true : false;
-
+//
 //        $this->assertTrue($json);
-    }
+//    }
 }

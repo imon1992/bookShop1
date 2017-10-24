@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Окт 20 2017 г., 15:53
+-- Время создания: Окт 24 2017 г., 14:10
 -- Версия сервера: 5.5.53
 -- Версия PHP: 5.5.38
 
@@ -14,7 +14,7 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!40101 SET NAMES utf8mb4 */;
 
 --
 -- База данных: `bookShop`
@@ -23,33 +23,33 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `Author`
+-- Структура таблицы `author`
 --
 
-CREATE TABLE `Author` (
+CREATE TABLE `author` (
   `id` int(11) NOT NULL,
-  `name` varchar(15) NOT NULL,
-  `surname` varchar(15) NOT NULL
+  `name` varchar(50) NOT NULL,
+  `surname` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Дамп данных таблицы `Author`
+-- Дамп данных таблицы `author`
 --
 
-INSERT INTO `Author` (`id`, `name`, `surname`) VALUES
-(5, 'authorryaaa', 'new'),
-(6, 'Ben', 'Brown'),
-(7, 'Stiw', 'Jobssss'),
-(10, 'Bogdan', 'Stupka'),
-(11, 'Lina', 'Kostenko');
+INSERT INTO `author` (`id`, `name`, `surname`) VALUES
+(1, 'Stephen', 'King'),
+(3, 'Dmitriy', 'Gluhovskiy'),
+(4, 'Bob', 'Brown'),
+(7, 'Andrew', 'Butorin'),
+(8, 'Lina', 'Kostenko');
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `Bag`
+-- Структура таблицы `bag`
 --
 
-CREATE TABLE `Bag` (
+CREATE TABLE `bag` (
   `id` int(11) NOT NULL,
   `book_id` int(11) NOT NULL,
   `client_id` int(11) NOT NULL,
@@ -59,10 +59,10 @@ CREATE TABLE `Bag` (
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `Book`
+-- Структура таблицы `book`
 --
 
-CREATE TABLE `Book` (
+CREATE TABLE `book` (
   `id` int(11) NOT NULL,
   `name` varchar(100) DEFAULT NULL,
   `price` double DEFAULT NULL,
@@ -71,65 +71,71 @@ CREATE TABLE `Book` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Дамп данных таблицы `Book`
+-- Дамп данных таблицы `book`
 --
 
-INSERT INTO `Book` (`id`, `name`, `price`, `description`, `discount`) VALUES
-(1, 'War of Gods', 250, 'War of Gods desc', 4),
-(2, 'metro 2033', 500, 'desc', 3),
-(3, 'My Memuars', 465, 'My Memuars desc', 5);
+INSERT INTO `book` (`id`, `name`, `price`, `description`, `discount`) VALUES
+(1, 'Metro 2033', 255, 'Metro 2033 desc', 0),
+(2, 'Doctor Sleep', 200, 'Doctor Sleep desc', 2),
+(3, 'War of Gods', 450, 'War of Gods desc', 5),
+(4, 'Siege of Paradise', 250, 'Siege of Paradise desc', 5),
+(5, 'Lina Kostenko Autobiography', 100, 'Lina Kostenko life and art ', 5);
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `BookAuthor`
+-- Структура таблицы `bookAuthor`
 --
 
-CREATE TABLE `BookAuthor` (
+CREATE TABLE `bookAuthor` (
   `id` int(11) NOT NULL,
   `book_id` int(11) NOT NULL,
   `author_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Дамп данных таблицы `BookAuthor`
+-- Дамп данных таблицы `bookAuthor`
 --
 
-INSERT INTO `BookAuthor` (`id`, `book_id`, `author_id`) VALUES
-(2, 1, 10),
-(3, 2, 10),
-(7, 1, 5),
-(8, 3, 7);
+INSERT INTO `bookAuthor` (`id`, `book_id`, `author_id`) VALUES
+(1, 1, 3),
+(2, 1, 1),
+(3, 2, 1),
+(4, 3, 4),
+(5, 4, 7),
+(6, 5, 8);
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `BookGenre`
+-- Структура таблицы `bookGenre`
 --
 
-CREATE TABLE `BookGenre` (
+CREATE TABLE `bookGenre` (
   `id` int(11) NOT NULL,
   `book_id` int(11) NOT NULL,
   `genre_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Дамп данных таблицы `BookGenre`
+-- Дамп данных таблицы `bookGenre`
 --
 
-INSERT INTO `BookGenre` (`id`, `book_id`, `genre_id`) VALUES
-(2, 2, 2),
-(3, 3, 2),
-(5, 1, 1),
-(6, 1, 2);
+INSERT INTO `bookGenre` (`id`, `book_id`, `genre_id`) VALUES
+(1, 1, 3),
+(2, 1, 2),
+(3, 2, 2),
+(4, 3, 3),
+(5, 4, 1),
+(6, 5, 4);
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `Client`
+-- Структура таблицы `client`
 --
 
-CREATE TABLE `Client` (
+CREATE TABLE `client` (
   `id` int(11) NOT NULL,
   `name` varchar(15) DEFAULT NULL,
   `surname` varchar(15) DEFAULT NULL,
@@ -144,52 +150,38 @@ CREATE TABLE `Client` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Дамп данных таблицы `Client`
+-- Дамп данных таблицы `client`
 --
 
-INSERT INTO `Client` (`id`, `name`, `surname`, `phone`, `email`, `login`, `password`, `hash`, `discount`, `isActive`, `role`) VALUES
-(1, NULL, NULL, NULL, NULL, '', '74be16979710d4c4e7c6', '', 0, 0, 'admin'),
-(4, NULL, NULL, NULL, NULL, 'test', 'ec6a6536ca304edf844d1d248a4f08dc', '1ba249876eaa33de5a52c29ed739c934', 0, 0, 'admin'),
-(6, 'Andrew', 'Kolotii', '0975998789', 'imon@mksat.net', 'imon', 'bb46977affa222b1237af74ec23c45a1', 'ae459b17c2534f5c9b35430b72ec498b', 0, 0, 'user'),
-(7, 'imon', 'dsfsdfsd', '948468548546', 'imon@mksat.net', 'imonX', 'ec6a6536ca304edf844d1d248a4f08dc', '740e6378ed10fde7904fdbccfeb6ac3c', 5, 1, 'user'),
-(8, 'NormA', 'Norms', '354353453534', 'imon@mksat.net', 'norm', 'ec6a6536ca304edf844d1d248a4f08dc', 'c994123fb4a50bb4cc178fc0dc74abbb', 0, 0, 'user'),
-(9, 'John', 'Smith', '5236854689', 'imon@mksat.net', 'testAsd', '2952e1846b4ea765dfd0fdfcb7e21097', '', 5, 0, 'user'),
-(10, 'asde', 'asde', '3698745632', 'imon@mksat.net', 'asde', 'd8e3d85962958758d3a29dd1ecb0800a', '52e0b935edf78c3b342d25f7630aa5e8', 0, 1, 'user');
+INSERT INTO `client` (`id`, `name`, `surname`, `phone`, `email`, `login`, `password`, `hash`, `discount`, `isActive`, `role`) VALUES
+(1, 'Test', 'test', '0000000000', 'test@gmail.com', 'test', 'ec6a6536ca304edf844d1d248a4f08dc', 'ec167602fecdc012ed22f0164c7c450d', 0, 1, 'user'),
+(2, 'admin', 'admin', '5555555555', 'admin@mksat.net', 'admin', 'ec6a6536ca304edf844d1d248a4f08dc', 'fdb1e6a50bb2b4b0034ae38a04d0ff31', 0, 1, 'admin'),
+(3, 'Andrew', 'kolotii', '02589635741', 'imon@mksat.net', 'imonX', 'ec6a6536ca304edf844d1d248a4f08dc', '', 10, 1, 'user'),
+(4, 'sade', 'asde', '1234567890', 'imon@mksat.net', 'asde', 'd8e3d85962958758d3a29dd1ecb0800a', '195dca0caeb34bcc67a2e8fb0539a3fe', 0, 1, 'user'),
+(5, 'asdw', 'sdw', '1232123131', 'imon@mksat.net', 'asdw', 'ee2409ce5d882decc442b6b7fb8c353f', '', 0, 1, 'user'),
+(6, 'zxzx', 'zxzx', '2313131312', 'imon@mksat.net', 'zxzx', '6e2495fafc65f40bb18712c198d93c87', '', 1, 1, 'user'),
+(7, 'asdf', 'asdf', '122312312321', 'imon@mksat.net', 'asdf', '5259ee4a034fdeddd1b65be92debe731', '', 1, 1, 'user');
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `Genre`
+-- Структура таблицы `genre`
 --
 
-CREATE TABLE `Genre` (
+CREATE TABLE `genre` (
   `id` int(11) NOT NULL,
   `name` varchar(15) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Дамп данных таблицы `Genre`
+-- Дамп данных таблицы `genre`
 --
 
-INSERT INTO `Genre` (`id`, `name`) VALUES
-(1, 'shadowww'),
-(2, 'triller'),
-(3, 'Fantastika'),
-(4, 'melodrama');
-
--- --------------------------------------------------------
-
---
--- Структура таблицы `HistoryBook`
---
-
-CREATE TABLE `HistoryBook` (
-  `id` int(11) NOT NULL,
-  `book_id` int(11) NOT NULL,
-  `book_name` varchar(100) NOT NULL,
-  `price` float NOT NULL,
-  `authors` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+INSERT INTO `genre` (`id`, `name`) VALUES
+(1, 'Fiction'),
+(2, 'ScienceFiction'),
+(3, 'Fantasy'),
+(4, 'Autobiography');
 
 -- --------------------------------------------------------
 
@@ -212,50 +204,50 @@ CREATE TABLE `orderPart` (
 --
 
 INSERT INTO `orderPart` (`id`, `book_id`, `order_id`, `user_id`, `count`, `bookPrice`, `bookDiscount`) VALUES
-(1, 1, 1, 7, 1, 250, 4),
-(2, 2, 1, 7, 1, 500, 3),
-(3, 1, 2, 7, 3, 250, 4),
-(4, 2, 2, 7, 1, 500, 3),
-(5, 1, 3, 10, 4, 250, 4);
+(1, 2, 1, 1, 2, 200, 2),
+(2, 1, 1, 4, 2, 255, 0),
+(3, 2, 1, 4, 3, 200, 2);
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `Payment`
+-- Структура таблицы `payment`
 --
 
-CREATE TABLE `Payment` (
+CREATE TABLE `payment` (
   `id` int(11) NOT NULL,
   `name` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Дамп данных таблицы `Payment`
+-- Дамп данных таблицы `payment`
 --
 
-INSERT INTO `Payment` (`id`, `name`) VALUES
-(1, 'WebMoney'),
-(2, 'Pay Pal');
+INSERT INTO `payment` (`id`, `name`) VALUES
+(1, 'Pay Pal'),
+(2, 'Webmoney'),
+(3, 'Qiwi'),
+(4, 'YandexMoney');
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `StatusOrder`
+-- Структура таблицы `statusOrder`
 --
 
-CREATE TABLE `StatusOrder` (
+CREATE TABLE `statusOrder` (
   `id` int(11) NOT NULL,
   `name` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Дамп данных таблицы `StatusOrder`
+-- Дамп данных таблицы `statusOrder`
 --
 
-INSERT INTO `StatusOrder` (`id`, `name`) VALUES
+INSERT INTO `statusOrder` (`id`, `name`) VALUES
 (1, 'In Process'),
-(2, 'Done'),
-(3, 'In transit');
+(2, 'In transit'),
+(3, 'Done');
 
 -- --------------------------------------------------------
 
@@ -269,7 +261,7 @@ CREATE TABLE `userOrder` (
   `payment_id` int(11) NOT NULL,
   `status_id` int(11) NOT NULL,
   `createDate` datetime NOT NULL,
-  `totalPrice` float NOT NULL,
+  `totalPrice` float(10,0) NOT NULL,
   `userDiscount` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -278,67 +270,60 @@ CREATE TABLE `userOrder` (
 --
 
 INSERT INTO `userOrder` (`id`, `user_id`, `payment_id`, `status_id`, `createDate`, `totalPrice`, `userDiscount`) VALUES
-(1, 7, 1, 1, '2017-10-19 13:34:43', 689, 5),
-(2, 7, 2, 2, '2017-10-20 12:19:23', 1144.75, 5),
-(3, 10, 2, 1, '2017-10-20 14:19:36', 960, 0);
+(1, 1, 2, 3, '2017-10-23 12:51:48', 392, 0),
+(2, 4, 3, 1, '2017-10-23 14:26:35', 1098, 0);
 
 --
 -- Индексы сохранённых таблиц
 --
 
 --
--- Индексы таблицы `Author`
+-- Индексы таблицы `author`
 --
-ALTER TABLE `Author`
+ALTER TABLE `author`
   ADD PRIMARY KEY (`id`);
 
 --
--- Индексы таблицы `Bag`
+-- Индексы таблицы `bag`
 --
-ALTER TABLE `Bag`
+ALTER TABLE `bag`
   ADD PRIMARY KEY (`id`),
   ADD KEY `book_id` (`book_id`),
   ADD KEY `client_id` (`client_id`);
 
 --
--- Индексы таблицы `Book`
+-- Индексы таблицы `book`
 --
-ALTER TABLE `Book`
+ALTER TABLE `book`
   ADD PRIMARY KEY (`id`);
 
 --
--- Индексы таблицы `BookAuthor`
+-- Индексы таблицы `bookAuthor`
 --
-ALTER TABLE `BookAuthor`
+ALTER TABLE `bookAuthor`
   ADD PRIMARY KEY (`id`),
   ADD KEY `BookAuthor_fk0` (`book_id`),
   ADD KEY `BookAuthor_fk1` (`author_id`);
 
 --
--- Индексы таблицы `BookGenre`
+-- Индексы таблицы `bookGenre`
 --
-ALTER TABLE `BookGenre`
+ALTER TABLE `bookGenre`
   ADD PRIMARY KEY (`id`),
   ADD KEY `BookGenre_fk0` (`book_id`),
   ADD KEY `BookGenre_fk1` (`genre_id`);
 
 --
--- Индексы таблицы `Client`
+-- Индексы таблицы `client`
 --
-ALTER TABLE `Client`
+ALTER TABLE `client`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `login` (`login`);
 
 --
--- Индексы таблицы `Genre`
+-- Индексы таблицы `genre`
 --
-ALTER TABLE `Genre`
-  ADD PRIMARY KEY (`id`);
-
---
--- Индексы таблицы `HistoryBook`
---
-ALTER TABLE `HistoryBook`
+ALTER TABLE `genre`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -349,15 +334,15 @@ ALTER TABLE `orderPart`
   ADD KEY `bookId` (`book_id`);
 
 --
--- Индексы таблицы `Payment`
+-- Индексы таблицы `payment`
 --
-ALTER TABLE `Payment`
+ALTER TABLE `payment`
   ADD PRIMARY KEY (`id`);
 
 --
--- Индексы таблицы `StatusOrder`
+-- Индексы таблицы `statusOrder`
 --
-ALTER TABLE `StatusOrder`
+ALTER TABLE `statusOrder`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -373,87 +358,82 @@ ALTER TABLE `userOrder`
 --
 
 --
--- AUTO_INCREMENT для таблицы `Author`
+-- AUTO_INCREMENT для таблицы `author`
 --
-ALTER TABLE `Author`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
---
--- AUTO_INCREMENT для таблицы `Bag`
---
-ALTER TABLE `Bag`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
---
--- AUTO_INCREMENT для таблицы `Book`
---
-ALTER TABLE `Book`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
---
--- AUTO_INCREMENT для таблицы `BookAuthor`
---
-ALTER TABLE `BookAuthor`
+ALTER TABLE `author`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 --
--- AUTO_INCREMENT для таблицы `BookGenre`
+-- AUTO_INCREMENT для таблицы `bag`
 --
-ALTER TABLE `BookGenre`
+ALTER TABLE `bag`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT для таблицы `book`
+--
+ALTER TABLE `book`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+--
+-- AUTO_INCREMENT для таблицы `bookAuthor`
+--
+ALTER TABLE `bookAuthor`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
--- AUTO_INCREMENT для таблицы `Client`
+-- AUTO_INCREMENT для таблицы `bookGenre`
 --
-ALTER TABLE `Client`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+ALTER TABLE `bookGenre`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
--- AUTO_INCREMENT для таблицы `Genre`
+-- AUTO_INCREMENT для таблицы `client`
 --
-ALTER TABLE `Genre`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+ALTER TABLE `client`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
--- AUTO_INCREMENT для таблицы `HistoryBook`
+-- AUTO_INCREMENT для таблицы `genre`
 --
-ALTER TABLE `HistoryBook`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `genre`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 --
 -- AUTO_INCREMENT для таблицы `orderPart`
 --
 ALTER TABLE `orderPart`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
--- AUTO_INCREMENT для таблицы `Payment`
+-- AUTO_INCREMENT для таблицы `payment`
 --
-ALTER TABLE `Payment`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+ALTER TABLE `payment`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
--- AUTO_INCREMENT для таблицы `StatusOrder`
+-- AUTO_INCREMENT для таблицы `statusOrder`
 --
-ALTER TABLE `StatusOrder`
+ALTER TABLE `statusOrder`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT для таблицы `userOrder`
 --
 ALTER TABLE `userOrder`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- Ограничения внешнего ключа сохраненных таблиц
 --
 
 --
--- Ограничения внешнего ключа таблицы `Bag`
+-- Ограничения внешнего ключа таблицы `bag`
 --
-ALTER TABLE `Bag`
+ALTER TABLE `bag`
   ADD CONSTRAINT `book_id` FOREIGN KEY (`book_id`) REFERENCES `Book` (`id`),
   ADD CONSTRAINT `client_id` FOREIGN KEY (`client_id`) REFERENCES `Client` (`id`);
 
 --
--- Ограничения внешнего ключа таблицы `BookAuthor`
+-- Ограничения внешнего ключа таблицы `bookAuthor`
 --
-ALTER TABLE `BookAuthor`
+ALTER TABLE `bookAuthor`
   ADD CONSTRAINT `BookAuthor_fk0` FOREIGN KEY (`book_id`) REFERENCES `Book` (`id`),
   ADD CONSTRAINT `BookAuthor_fk1` FOREIGN KEY (`author_id`) REFERENCES `Author` (`id`);
 
 --
--- Ограничения внешнего ключа таблицы `BookGenre`
+-- Ограничения внешнего ключа таблицы `bookGenre`
 --
-ALTER TABLE `BookGenre`
+ALTER TABLE `bookGenre`
   ADD CONSTRAINT `BookGenre_fk0` FOREIGN KEY (`book_id`) REFERENCES `Book` (`id`),
   ADD CONSTRAINT `BookGenre_fk1` FOREIGN KEY (`genre_id`) REFERENCES `Genre` (`id`);
 
